@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+
+# The -f switch tells Expect that it is reading commands from a file.
+
+stty -echo  #echo input character
+set timeout 30 
+set USAGE "Usage: ./ldadar.exp <server> <code> <password> \n"
+if {[llength $argv] != 3} {
+puts "\nERROR: Invalid number of arguments.\n"
+puts "$USAGE"
+exit
+}
+
+#exp_internal 1  #send diagnostic information internal to Expect to stderr if value is non-zero
+
+set prompt "(%|#|\\$|\\]|\\>)( $|$)"
+set HOSTNAME [lindex $argv 0]
+set CODE [lindex $argv 1]
+set PASSWORD [lindex $argv 2]
+spawn ssh -t $HOSTNAME
+expect "Verification code:" {
+  send -raw -- "$CODE\r"
+}
+expect "Password:" {
+  send -raw -- "$PASSWORD\r"
+}
+
+interact
