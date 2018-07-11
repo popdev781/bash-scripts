@@ -4,7 +4,7 @@
 "
 
 set shiftwidth=4
-set nu
+" set nu
 set autoindent
 syntax on
 set ruler
